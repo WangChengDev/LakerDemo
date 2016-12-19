@@ -34,7 +34,11 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onUserEvent(final String s) {
 
-        
+//
+//
+//
+//
+//
     }
 
     @OnClick(R.id.btn_click)
