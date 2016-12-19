@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onUserEvent(final String s) {
-//        Log.d("1111111111","旋转回调 : getHeight = "+orientationChanged.getHeight()+",getWidth = "+orientationChanged.getWidth());
     }
 
     @OnClick(R.id.btn_click)
