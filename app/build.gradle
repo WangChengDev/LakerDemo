@@ -1,29 +1,179 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'bugly'
+bugly {
+    appId = '9cbae90ade' // 注册时分配的App ID
+    appKey = '162794c5-953a-47fe-b119-088455b3eb22' // 注册时分配的App Key
+}
+def  outPutApkName = rootProject.ext.android.outPutApkName
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    dexOptions {
+        //        javaMaxHeapSize "4g"
+        preDexLibraries = false
+        javaMaxHeapSize = 4g
+    }
     defaultConfig {
         applicationId "com.laker.lakerdemo"
-        minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // 默认是umeng的渠道
+        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
+
+        ndk {
+            //设置bugly支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties' // will not include rxjava.properties
+    }
+    signingConfigs {
+        debug {
+            storeFile file(rootProject.KEYSTORE_PATH)
+            keyAlias = rootProject.KEY_ALIAS;
+            storePassword = rootProject.STORE_PASSWORD;
+            keyPassword = rootProject.KEY_PASSWORD;
+        }
+
+        release {
+            storeFile file(rootProject.KEYSTORE_PATH)
+            keyAlias = rootProject.KEY_ALIAS;
+            storePassword = rootProject.STORE_PASSWORD;
+            keyPassword = rootProject.KEY_PASSWORD;
+        }
     }
     buildTypes {
-        release {
+        debug {
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            versionNameSuffix "-debug"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        release {
+            signingConfig signingConfigs.release
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            versionNameSuffix "-release"
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        // 输出apk名称为LakerDemo_v1.0_wandoujia.apk
+                        def fileName = "${outPutApkName}_v${defaultConfig.versionName}_${variant.productFlavors[0].name}_release.apk"
+                        output.outputFile = new File(outputFile.parent, fileName)
+                    }
+                }
+            }
+        }
+    }
+
+    productFlavors {
+
+        wandoujia {}
+        baidu {}
+//        c360 {}
+//        uc {}
+
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
+    compile rootProject.ext.dependencies["appcompat-v7"]
+    compile rootProject.ext.dependencies["design"]
+    compile rootProject.ext.dependencies["cardview-v7"]
+    compile rootProject.ext.dependencies["jlog"]
+    compile rootProject.ext.dependencies["gson"]
+    compile rootProject.ext.dependencies["okhttp"]
+    compile rootProject.ext.dependencies["retrofit"]
+    compile rootProject.ext.dependencies["converter-gson"]
+    compile rootProject.ext.dependencies["adapter-rxjava"]
+    compile rootProject.ext.dependencies["glide"]
+    compile rootProject.ext.dependencies["butterknife"]
+    compile rootProject.ext.dependencies["rxjava"]
+    compile rootProject.ext.dependencies["rxandroid"]
+    compile rootProject.ext.dependencies["rxbinding"]
+    compile rootProject.ext.dependencies["base-adapter"]
+    compile rootProject.ext.dependencies["logging-interceptor"]
+    compile rootProject.ext.dependencies["multidex"]
+    compile rootProject.ext.dependencies["eventbus"]
+    compile rootProject.ext.dependencies["bugly_crashreport"]
+    compile rootProject.ext.dependencies["umeng_analytics"]
+    apt rootProject.ext.dependencies["eventbus-annotation-processor"]
+}
+
+//task buildJar(dependsOn: ['compileReleaseJavaWithJavac'], type: Jar) {
+//    baseName = "scanner"
+//    appendix = "beta"
+//    version = "1.0.0"
+//    classifier = "release"
+//    //后缀名
+//    extension = "jar"
+//    //最终的 Jar 包名，"androidJar-demo-1.0.0-release.jar" -----> [baseName]-[appendix]-[version]-[classifier].[extension]
+//    archiveName = baseName + "-" + appendix + "-" + version + "-" + classifier + "." + extension
+//    //archiveName = baseName + "." + extension
+//    //需打包的资源所在的路径集
+//    def srcClassDir = [project.buildDir.absolutePath + "/intermediates/classes/release"];
+//    //初始化资源路径集
+//    from srcClassDir
+//    //去除路径集下部分的资源
+//    //exclude "org/chaos/demo/jar/MainActivity.class"
+//    //只导入资源路径集下的部分资源
+//    include "com/plugin/zxing/*.class"
+//    //注: exclude include 支持可变长参数
+//}
+//
+//build.doLast {
+//    copy {
+//        from('build/outputs/apk')
+//        into(rootProject.todayOutput)
+//        include('*release.apk') //拷贝包含以release.apk结尾的apk文件
+//    }
+//}
+
+// EventBus3.0 Index 索引加速
+//EventBus使用了annotation，默认在编译时生成代码，生成索引，
+//添加index后会在编译时运行，自动生成相应代码。
+//build时出现：以下选项未被任何处理程序识别: '[eventBusIndex]'，
+// 是因为程序中还未使用到EventBus,It must have at least one @Subscribe method
+apt {
+    arguments {
+        eventBusIndex "com.laker.EventBusIndex"
+    }
 }
