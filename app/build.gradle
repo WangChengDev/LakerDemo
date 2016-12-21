@@ -92,7 +92,7 @@ android {
     productFlavors {
 
         wandoujia {}
-        baidu {}
+//        baidu {}
 //        c360 {}
 //        uc {}
 
@@ -136,6 +136,9 @@ dependencies {
     compile rootProject.ext.dependencies["bugly_crashreport"]
     compile rootProject.ext.dependencies["umeng_analytics"]
     apt rootProject.ext.dependencies["eventbus-annotation-processor"]
+    compile project(':extraModules:fragmentation')
+    compile project(':extraModules:fragmentation_swipeback')
+    compile project(':extraModules:ui')
 }
 
 //task buildJar(dependsOn: ['compileReleaseJavaWithJavac'], type: Jar) {

@@ -56,7 +56,7 @@ public class App extends MultiDexApplication {
         * 参数2：APPID，平台注册时得到,注意替换成你的appId
         * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
         */
-        CrashReport.initCrashReport(getApplicationContext(), "9cbae90ade", true);
+//        CrashReport.initCrashReport(getApplicationContext(), "9cbae90ade", true);
 
         //String UMAnalyticsAppKey = getPackageManager().getApplicationInfo(getPackageName(),PackageManager.GET_META_DATA).ge
         try {

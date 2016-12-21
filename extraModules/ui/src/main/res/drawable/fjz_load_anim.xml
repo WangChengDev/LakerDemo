@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/selected"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/fjz_loading_1"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/fjz_loading_2"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/fjz_loading_3"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/fjz_loading_4"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/fjz_loading_5"
+        android:duration="100" />
+</animation-list>
