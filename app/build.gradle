@@ -139,6 +139,13 @@ dependencies {
     compile project(':extraModules:fragmentation')
     compile project(':extraModules:fragmentation_swipeback')
     compile project(':extraModules:ui')
+    compile project(':extraModules:Pushlib')
+    compile project(':extraModules:frame')
+}
+apt {
+    arguments {
+        eventBusIndex "com.laker.EventBusIndex"
+    }
 }
 
 //task buildJar(dependsOn: ['compileReleaseJavaWithJavac'], type: Jar) {
@@ -175,8 +182,4 @@ dependencies {
 //添加index后会在编译时运行，自动生成相应代码。
 //build时出现：以下选项未被任何处理程序识别: '[eventBusIndex]'，
 // 是因为程序中还未使用到EventBus,It must have at least one @Subscribe method
-apt {
-    arguments {
-        eventBusIndex "com.laker.EventBusIndex"
-    }
-}
+

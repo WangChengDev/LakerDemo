@@ -38,7 +38,7 @@ ext {
             "bugly_crashreport"            : "com.tencent.bugly:crashreport:latest.release",
             "bugly_nativecrashreport"      : "com.tencent.bugly:nativecrashreport:latest.release",
             "umeng_analytics"              : "com.umeng.analytics:analytics:latest.integration",
-            "recyclerview"                 : "com.android.support:recyclerview-v7:23.2.0"
+            "recyclerview"                 : "com.android.support:recyclerview-v7:23.2.0",
     ]
 
 }
