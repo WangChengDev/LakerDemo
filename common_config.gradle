@@ -39,6 +39,9 @@ ext {
             "bugly_nativecrashreport"      : "com.tencent.bugly:nativecrashreport:latest.release",
             "umeng_analytics"              : "com.umeng.analytics:analytics:latest.integration",
             "recyclerview"                 : "com.android.support:recyclerview-v7:23.2.0",
+            "dagger"                       : "com.google.dagger:dagger:2.4",
+            "dagger-compiler"              : "com.google.dagger:dagger-compiler:2.4",
+            "javax.annotation"             : "org.glassfish:javax.annotation:10.0-b28",
     ]
 
 }

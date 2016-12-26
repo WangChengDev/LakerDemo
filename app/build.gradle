@@ -136,11 +136,15 @@ dependencies {
     compile rootProject.ext.dependencies["bugly_crashreport"]
     compile rootProject.ext.dependencies["umeng_analytics"]
     apt rootProject.ext.dependencies["eventbus-annotation-processor"]
+    apt rootProject.ext.dependencies["dagger-compiler"]
+    provided  rootProject.ext.dependencies["javax.annotation"]
+    compile  rootProject.ext.dependencies["dagger"]
     compile project(':extraModules:fragmentation')
     compile project(':extraModules:fragmentation_swipeback')
     compile project(':extraModules:ui')
     compile project(':extraModules:Pushlib')
     compile project(':extraModules:frame')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
 apt {
     arguments {

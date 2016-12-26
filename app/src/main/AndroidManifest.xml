@@ -17,6 +17,13 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+
+
+
     <!-- bugly配置权限end -->
     <application
         android:name="com.laker.lakerdemo.App"
@@ -65,7 +72,11 @@
         <meta-data
             android:name="UMENG_MESSAGE_SECRET"
             android:value="258b6e7135dd0e49a7b277e5bb67f57b">
-        </meta-data>
+        </meta-data><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
 
     </application>
 
