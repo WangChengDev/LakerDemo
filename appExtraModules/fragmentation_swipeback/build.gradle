@@ -13,5 +13,6 @@ android {
 
 dependencies {
     provided rootProject.ext.dependencies["appcompat-v7"]
-    provided project(':extraModules:fragmentation')
+    //provided project(':extraModules:fragmentation')
+    provided project(':appExtraModules:fragmentation')
 }

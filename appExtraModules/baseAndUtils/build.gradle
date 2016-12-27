@@ -29,10 +29,14 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
 
-    compile project(':extraModules:fragmentation')
-    compile project(':extraModules:fragmentation_swipeback')
-    //compile project(':extraModules:ui')
-    compile project(':extraModules:Pushlib')
-    //compile project(':extraModules:frame')
+//    compile project(':extraModules:fragmentation')
+//    compile project(':extraModules:fragmentation_swipeback')
+//    //compile project(':extraModules:ui')
+//    compile project(':extraModules:Pushlib')
+//    //compile project(':extraModules:frame')
+
+    compile project(':appExtraModules:fragmentation')
+    compile project(':appExtraModules:fragmentation_swipeback')
+    compile project(':appExtraModules:Pushlib')
     compile rootProject.ext.dependencies["umeng_analytics"]
 }

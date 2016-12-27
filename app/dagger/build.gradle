@@ -29,13 +29,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
 
-//    compile project(':appExtraModules:baseAndUtils')
-//    compile project(':appExtraModules:ui')
-//    compile project(':appExtraModules:Pushlib')
-//    compile project(':appExtraModules:frame')
+    compile project(':appExtraModules:baseAndUtils')
+    compile project(':appExtraModules:ui')
+    compile project(':appExtraModules:Pushlib')
+    compile project(':appExtraModules:frame')
 
-    compile project(':extraModules:baseAndUtils')
-    compile project(':extraModules:ui')
-    compile project(':extraModules:Pushlib')
-    compile project(':extraModules:frame')
+//    compile project(':extraModules:baseAndUtils')
+//    compile project(':extraModules:ui')
+//    compile project(':extraModules:Pushlib')
+//    compile project(':extraModules:frame')
 }

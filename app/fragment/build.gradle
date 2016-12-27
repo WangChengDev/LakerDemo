@@ -140,19 +140,19 @@ dependencies {
     provided  rootProject.ext.dependencies["javax.annotation"]
     compile  rootProject.ext.dependencies["dagger"]
 
-//    compile project(':appExtraModules:fragmentation')
-//    compile project(':appExtraModules:fragmentation_swipeback')
-//    compile project(':appExtraModules:ui')
-//    compile project(':appExtraModules:Pushlib')
-//    compile project(':appExtraModules:frame')
-//    compile project(':appExtraModules:baseAndUtils')
+    compile project(':appExtraModules:fragmentation')
+    compile project(':appExtraModules:fragmentation_swipeback')
+    compile project(':appExtraModules:ui')
+    compile project(':appExtraModules:Pushlib')
+    compile project(':appExtraModules:frame')
+    compile project(':appExtraModules:baseAndUtils')
 
-    compile project(':extraModules:fragmentation')
-    compile project(':extraModules:fragmentation_swipeback')
-    compile project(':extraModules:ui')
-    compile project(':extraModules:Pushlib')
-    compile project(':extraModules:frame')
-    compile project(':extraModules:baseAndUtils')
+//    compile project(':extraModules:fragmentation')
+//    compile project(':extraModules:fragmentation_swipeback')
+//    compile project(':extraModules:ui')
+//    compile project(':extraModules:Pushlib')
+//    compile project(':extraModules:frame')
+//    compile project(':extraModules:baseAndUtils')
 
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }
