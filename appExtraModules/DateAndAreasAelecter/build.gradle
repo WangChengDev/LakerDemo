@@ -1,6 +1,18 @@
 apply plugin: 'com.android.library'
 
 android {
+//    compileSdkVersion 24
+//    buildToolsVersion "24.0.3"
+//
+//    defaultConfig {
+//        minSdkVersion 15
+//        targetSdkVersion 24
+//        versionCode 1
+//        versionName "1.0"
+//
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//
+//    }
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
@@ -10,7 +22,6 @@ android {
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -24,17 +35,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //compile 'com.android.support:appcompat-v7:24.2.1'
-    testCompile 'junit:junit:4.12'
-
-//    compile project(':extraModules:fragmentation')
-//    compile project(':extraModules:fragmentation_swipeback')
-//    //compile project(':extraModules:ui')
-//    compile project(':extraModules:Pushlib')
-//    //compile project(':extraModules:frame')
+//    compile 'com.android.support:appcompat-v7:24.2.1'
     compile rootProject.ext.dependencies["appcompat-v7"]
-    compile project(':appExtraModules:fragmentation')
-    compile project(':appExtraModules:fragmentation_swipeback')
-    compile project(':appExtraModules:Pushlib')
-    compile rootProject.ext.dependencies["umeng_analytics"]
+    testCompile 'junit:junit:4.12'
 }
