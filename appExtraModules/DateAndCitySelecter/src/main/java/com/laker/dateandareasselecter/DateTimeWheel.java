@@ -3,8 +3,10 @@ package com.laker.dateandareasselecter;
 import android.content.Context;
 import android.view.View;
 
+import com.laker.dateandareasselecter.adapters.ArrayWheelAdapter;
 import com.laker.dateandareasselecter.adapters.NumericWheelAdapter;
 import com.laker.dateandareasselecter.config.DateTimeScrollerConfig;
+import com.laker.dateandareasselecter.config.DefaultConfig;
 import com.laker.dateandareasselecter.data.source.TimeRepository;
 import com.laker.dateandareasselecter.utils.DateConstants;
 import com.laker.dateandareasselecter.utils.Utils;
@@ -19,11 +21,12 @@ import java.util.Calendar;
 class DateTimeWheel {
     private Context mContext;
 
-    private WheelView mYearView, mMonthView, mDayView, mHourView, mMinuteView; // 滚动视图
+    private WheelView mYearView, mMonthView, mDayView, mHourView, mMinuteView, mAmPmView; // 滚动视图
     private NumericWheelAdapter mYearAdapter, mMonthAdapter, mDayAdapter, mHourAdapter, mMinuteAdapter;
 
     private DateTimeScrollerConfig mScrollerConfig;
     private TimeRepository mRepository;
+    private boolean is12HourMode = false;
 
     private OnWheelChangedListener mYearListener = new OnWheelChangedListener() {
         @Override
@@ -89,6 +92,14 @@ class DateTimeWheel {
         mDayView = (WheelView) view.findViewById( R.id.day);
         mHourView = (WheelView) view.findViewById( R.id.hour);
         mMinuteView = (WheelView) view.findViewById( R.id.minute);
+        mAmPmView = (WheelView) view.findViewById(R.id.am_pm);
+
+        mYearView.setVisibleItems(mScrollerConfig.mMaxLines);
+        mMonthView.setVisibleItems(mScrollerConfig.mMaxLines);
+        mDayView.setVisibleItems(mScrollerConfig.mMaxLines);
+        mHourView.setVisibleItems(mScrollerConfig.mMaxLines);
+        mMinuteView.setVisibleItems(mScrollerConfig.mMaxLines);
+        mAmPmView.setVisibleItems(mScrollerConfig.mMaxLines);
 
         // 根据类型, 设置隐藏位置
         switch (mScrollerConfig.mDateType) {
@@ -110,6 +121,14 @@ class DateTimeWheel {
             case YEAR:
                 Utils.showViews(mYearView);
                 break;
+        }
+
+        if (mScrollerConfig.mHourMode == DefaultConfig.HOUR_12){
+            is12HourMode = true;
+            Utils.showViews(mAmPmView);
+            mAmPmView.setViewAdapter(new ArrayWheelAdapter<String>(mContext, mScrollerConfig.HOUR_12_STRINGS));
+        }else {
+            is12HourMode = false;
         }
 
         mYearView.addChangingListener(mYearListener);
@@ -150,6 +169,12 @@ class DateTimeWheel {
         int minMonth = mRepository.getMinMonth(curYear);
         mMonthView.setCurrentItem(mRepository.getDefaultCalendar().month - minMonth);
     }
+
+
+    public int getAmPmPostion(){
+        return mAmPmView.getCurrentItem();
+    }
+
 
     /**
      * 初始化日视图

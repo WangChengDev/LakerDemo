@@ -9,5 +9,5 @@ import com.laker.dateandareasselecter.DateTimeScrollerDialog;
  * @author C.L. Wang
  */
 public interface OnDateTimeSetListener {
-    void onDateTimeSet(DateTimeScrollerDialog timePickerView, long milliseconds);
+    void onDateTimeSet(DateTimeScrollerDialog timePickerView, long milliseconds,int am_pm_postion);
 }

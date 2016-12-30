@@ -28,6 +28,8 @@ public class DefaultConfig {
     public static final int MAX_LINE = 5; // 最大行数, 依据控件样式
     public static final int POSTION_CENTER = 0;
     public static final int POSTION_BOTTOM = 1;
+    public static final int HOUR_12 = 0;
+    public static final int HOUR_24 = 1;
 
     // 默认文案
     public static String CANCEL = "取消";

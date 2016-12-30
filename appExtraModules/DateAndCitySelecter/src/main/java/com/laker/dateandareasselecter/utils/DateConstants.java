@@ -13,7 +13,8 @@ public class DateConstants {
     public static final int MAX_MONTH = 12;
     public static final int MIN_DAY = MIN_MONTH;
     public static final int MIN_HOUR = 0;
-    public static final int MAX_HOUR = 23;
+    public static final int MAX_HOUR_24 = 23;
+    public static final int MAX_HOUR_12 = 11;
     public static final int MIN_MINUTE = 0;
     public static final int MAX_MINUTE = 59;
 }

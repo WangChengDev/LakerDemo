@@ -165,7 +165,7 @@ public class DateTimeScrollerDialog extends DialogFragment implements View.OnCli
 
         mCurrentMilliseconds = calendar.getTimeInMillis();
         if (mScrollerConfig.mCallback != null) {
-            mScrollerConfig.mCallback.onDateTimeSet(this, mCurrentMilliseconds);
+            mScrollerConfig.mCallback.onDateTimeSet(this, mCurrentMilliseconds,mDateTimeWheel.getAmPmPostion());
         }
         dismiss();
     }
@@ -275,6 +275,21 @@ public class DateTimeScrollerDialog extends DialogFragment implements View.OnCli
 
         public Builder setPostion(int postion) {
             mScrollerConfig.mPostion = postion;
+            return this;
+        }
+
+        public Builder setHourMode(int mHourMode) {
+            mScrollerConfig.mHourMode = mHourMode;
+            return this;
+        }
+
+        public Builder set12HourStrings(String[] strings) {
+            mScrollerConfig.HOUR_12_STRINGS = strings;
+            return this;
+        }
+
+        public Builder setMaxLines(int lines) {
+            mScrollerConfig.mMaxLines = lines;
             return this;
         }
 

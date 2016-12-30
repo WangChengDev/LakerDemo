@@ -2,6 +2,8 @@ package com.laker.dateandareasselecter.adapters;
 
 import android.content.Context;
 
+import com.laker.dateandareasselecter.R;
+
 /**
  * =============================================================================
  * [YTF] (C)2015-2099 Yuantuan Inc.
@@ -29,6 +31,7 @@ public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {
 
         //setEmptyItemResource(TEXT_VIEW_ITEM_RESOURCE);
         this.items = items;
+        this.itemResourceId = R.layout.tv_item; // 默认样式
     }
 
     @Override

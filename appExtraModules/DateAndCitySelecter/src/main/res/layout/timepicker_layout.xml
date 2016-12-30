@@ -10,53 +10,133 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout="@layout/dialog_top"/>
+    <!--<FrameLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/picker_dialog_height">-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/linear_wheel"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<com.laker.dateandareasselecter.wheel.WheelView-->
+                <!--android:id="@+id/year"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1.0"/>-->
+
+            <!--<com.laker.dateandareasselecter.wheel.WheelView-->
+                <!--android:id="@+id/month"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1.0"/>-->
+
+            <!--<com.laker.dateandareasselecter.wheel.WheelView-->
+                <!--android:id="@+id/day"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1.0"/>-->
+
+            <!--<com.laker.dateandareasselecter.wheel.WheelView-->
+                <!--android:id="@+id/hour"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1.0"/>-->
+
+            <!--<com.laker.dateandareasselecter.wheel.WheelView-->
+                <!--android:id="@+id/minute"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1.0"/>-->
+        <!--</LinearLayout>-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/date_wheel_bg"-->
+            <!--android:contentDescription="@null"/>-->
+
+    <!--</FrameLayout>-->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/picker_dialog_height">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/linear_wheel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="@android:color/white"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <com.laker.dateandareasselecter.wheel.WheelView
-                android:id="@+id/year"
-                android:layout_width="0dp"
-                android:visibility="gone"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"/>
+            <LinearLayout
+                android:id="@+id/linear_wheel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
 
-            <com.laker.dateandareasselecter.wheel.WheelView
-                android:id="@+id/month"
-                android:layout_width="0dp"
-                android:visibility="gone"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"/>
+                <com.laker.dateandareasselecter.wheel.WheelView
+                    android:id="@+id/year"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:visibility="gone"/>
 
-            <com.laker.dateandareasselecter.wheel.WheelView
-                android:id="@+id/day"
-                android:layout_width="0dp"
-                android:visibility="gone"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"/>
+                <com.laker.dateandareasselecter.wheel.WheelView
+                    android:id="@+id/month"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:visibility="gone"/>
 
-            <com.laker.dateandareasselecter.wheel.WheelView
-                android:id="@+id/hour"
-                android:layout_width="0dp"
-                android:visibility="gone"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"/>
+                <com.laker.dateandareasselecter.wheel.WheelView
+                    android:id="@+id/day"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:visibility="gone"/>
 
-            <com.laker.dateandareasselecter.wheel.WheelView
-                android:id="@+id/minute"
-                android:layout_width="0dp"
-                android:visibility="gone"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_wheel2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+                <com.laker.dateandareasselecter.wheel.WheelView
+                    android:id="@+id/am_pm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:visibility="gone"/>
+
+                <com.laker.dateandareasselecter.wheel.WheelView
+                    android:id="@+id/hour"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:visibility="gone"/>
+
+                <com.laker.dateandareasselecter.wheel.WheelView
+                    android:id="@+id/minute"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:visibility="gone"/>
+            </LinearLayout>
         </LinearLayout>
+
 
         <ImageView
             android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.laker.dateandareasselecter.data.source;
 
 
 import com.laker.dateandareasselecter.config.DateTimeScrollerConfig;
+import com.laker.dateandareasselecter.config.DefaultConfig;
 import com.laker.dateandareasselecter.data.WheelCalendar;
 import com.laker.dateandareasselecter.utils.DateConstants;
 import com.laker.dateandareasselecter.utils.Utils;
@@ -91,10 +92,19 @@ public class TimeRepository implements TimeDataSource {
 
     @Override
     public int getMaxHour(int year, int month, int day) {
-        if (!mIsMaxNoRange && Utils.isTimeEquals(mCalendarMax, year, month, day))
+//        if (!mIsMaxNoRange && Utils.isTimeEquals(mCalendarMax, year, month, day))
+//            return mCalendarMax.hour;
+//        else
+//            return DateConstants.MAX_HOUR_24;
+        if (!mIsMaxNoRange && Utils.isTimeEquals(mCalendarMax, year, month, day)){
             return mCalendarMax.hour;
-        else
-            return DateConstants.MAX_HOUR;
+        }else {
+            if (DateTimeScrollerConfig.mHourMode == DefaultConfig.HOUR_24){
+                return DateConstants.MAX_HOUR_24;
+            }else {
+                return DateConstants.MAX_HOUR_12;
+            }
+        }
     }
 
     @Override

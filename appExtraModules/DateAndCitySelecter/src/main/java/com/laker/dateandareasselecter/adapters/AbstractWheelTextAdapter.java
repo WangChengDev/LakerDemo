@@ -204,7 +204,7 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      */
     protected void configureTextView(TextView view) {
         if (mScrollerConfig == null)
-            mScrollerConfig = new DateTimeScrollerConfig();
+            mScrollerConfig = new BaseScrollerConfig();
         view.setTextColor(mScrollerConfig.mWheelTVNormalColor);
 
         view.setGravity(Gravity.CENTER);

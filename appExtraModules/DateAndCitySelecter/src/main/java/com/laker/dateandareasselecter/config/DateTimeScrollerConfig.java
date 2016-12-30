@@ -22,5 +22,7 @@ public class DateTimeScrollerConfig extends BaseScrollerConfig {
     public WheelCalendar mCurCalendar = new WheelCalendar(System.currentTimeMillis()); // 当前日期
 
     public OnDateTimeSetListener mCallback; // 回调
+    public static int mHourMode = DefaultConfig.HOUR_24; // 24小时制还是12小时制，默认24
+    public String[] HOUR_12_STRINGS = {"am","pm"};
 
 }
