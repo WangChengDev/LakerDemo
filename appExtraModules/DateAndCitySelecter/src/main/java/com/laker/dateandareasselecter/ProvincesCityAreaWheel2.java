@@ -5,7 +5,6 @@ import android.view.View;
 
 import com.laker.dateandareasselecter.adapters.ArrayWheelAdapter;
 import com.laker.dateandareasselecter.config.ProvinceCityAreaScrollerConfig;
-import com.laker.dateandareasselecter.data.CityIDBean;
 import com.laker.dateandareasselecter.utils.Utils;
 import com.laker.dateandareasselecter.wheel.OnWheelChangedListener;
 import com.laker.dateandareasselecter.wheel.WheelView;
@@ -16,74 +15,73 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 省市区滚轮
  */
-class ProvincesCityAreaWheel {
+class ProvincesCityAreaWheel2 {
     private Context mContext;
     private WheelView mProvince, mCity, mArea; // 滚动视图
     /**
      * 把全国的省市区的信息以json的格式保存，解析完成后赋值为null
      */
-    private JSONArray mJsonArray;
+    private JSONObject mJsonObj;
     /**
      * 所有省
      */
-    private ArrayList<CityIDBean> mProvinceDatas;
+    private String[] mProvinceDatas;
     /**
      * key - 省 value - 市s
      */
-    private Map<String, ArrayList<CityIDBean>> mCitisDatasMap = new HashMap<String, ArrayList<CityIDBean>>();
+    private Map<String, String[]> mCitisDatasMap = new HashMap<String, String[]>();
     /**
-     * key - 市ID values - 区s
+     * key - 市 values - 区s
      */
-    private Map<String, ArrayList<CityIDBean>> mAreaDatasMap = new HashMap<String, ArrayList<CityIDBean>>();
+    private Map<String, String[]> mAreaDatasMap = new HashMap<String, String[]>();
 
     /**
      * 当前省的名称
      */
-    private CityIDBean mCurrentProvice ;
+    private String mCurrentProviceName = "";
     /**
      * 当前市的名称
      */
-    private CityIDBean mCurrentCity ;
+    private String mCurrentCityName = "";
     /**
      * 当前区的名称
      */
-    private CityIDBean mCurrentArea ;
+    private String mCurrentAreaName = "";
     private ProvinceCityAreaScrollerConfig mScrollerConfig;
 
     private OnWheelChangedListener mProvinceListener = new OnWheelChangedListener() {
         @Override
         public void onChanged(WheelView wheel, int oldValue, int newValue) {
             int pCurrent = mProvince.getCurrentItem();
-            mCurrentProvice = mProvinceDatas.get(pCurrent);
-            updateCities(mCurrentProvice.getID());
+            mCurrentProviceName = mProvinceDatas[pCurrent];
+            updateCities(mCurrentProviceName);
         }
     };
     private OnWheelChangedListener mCityListener = new OnWheelChangedListener() {
         @Override
         public void onChanged(WheelView wheel, int oldValue, int newValue) {
             int pCurrent = mCity.getCurrentItem();
-            mCurrentCity = mCitisDatasMap.get(mCurrentProvice.getID()).get(pCurrent);
-            updateAreas(mCurrentCity.getID());
+            mCurrentCityName = mCitisDatasMap.get(mCurrentProviceName)[pCurrent];
+            updateAreas(mCurrentCityName);
 
         }
     };
     private OnWheelChangedListener mAreaListener = new OnWheelChangedListener() {
         @Override
         public void onChanged(WheelView wheel, int oldValue, int newValue) {
-            mCurrentArea = mAreaDatasMap.get(mCurrentCity.getID()).get(newValue);
+            mCurrentAreaName = mAreaDatasMap.get(mCurrentCityName)[newValue];
         }
     };
     private OnWheelChangedListener mSingleListener = new OnWheelChangedListener() {
         @Override
         public void onChanged(WheelView wheel, int oldValue, int newValue) {
-            mCurrentArea = mAreaDatasMap.get(mCurrentCity.getID()).get(newValue);
+            mCurrentAreaName = mAreaDatasMap.get(mCurrentCityName)[newValue];
 
         }
     };
@@ -94,7 +92,7 @@ class ProvincesCityAreaWheel {
      * @param view           视图
      * @param scrollerConfig 滚动参数
      */
-    ProvincesCityAreaWheel(View view, ProvinceCityAreaScrollerConfig scrollerConfig) {
+    ProvincesCityAreaWheel2(View view, ProvinceCityAreaScrollerConfig scrollerConfig) {
         mScrollerConfig = scrollerConfig;
         mContext = view.getContext();
         initJsonData();
@@ -111,17 +109,14 @@ class ProvincesCityAreaWheel {
         initView(view); // 初始化视图
         initProvinceView();
         if (mScrollerConfig.mProvince != null && mScrollerConfig.mProvince.length() > 0) {
-            mCurrentProvice = new CityIDBean(mScrollerConfig.mProvince,null);
-
+            mCurrentProviceName = mScrollerConfig.mProvince;
         }
-        initCityView(mCurrentProvice.getID());
+        initCityView(mCurrentProviceName);
 
         if (mScrollerConfig.mCity != null && mScrollerConfig.mCity.length() > 0) {
-            mCurrentCity = new CityIDBean(mScrollerConfig.mCity,null);
+            mCurrentCityName = mScrollerConfig.mCity;
         }
-
-        if (mCurrentCity != null)
-        initAreaView(mCurrentCity.getID());
+        initAreaView(mCurrentCityName);
 
 
     }
@@ -166,28 +161,22 @@ class ProvincesCityAreaWheel {
      * 初始化省
      */
     private void initProvinceView() {
-
-        String[] mProvinceName = new String[mProvinceDatas.size()];
-        for (int i = 0; i < mProvinceDatas.size(); i++) {
-            mProvinceName[i] = mProvinceDatas.get(i).getName();
-        }
-        mProvince.setViewAdapter(new ArrayWheelAdapter<String>(mContext, mProvinceName));
-        mCurrentProvice = mProvinceDatas.get(mProvince.getCurrentItem());
-
+        mProvince.setViewAdapter(new ArrayWheelAdapter<String>(mContext, mProvinceDatas));
+        mCurrentProviceName = mProvinceDatas[mProvince.getCurrentItem()];
     }
 
     /**
      * 初始化市
      */
-    private void initCityView(String provinceID) {
-        updateCities(provinceID);
+    private void initCityView(String provinceName) {
+        updateCities(provinceName);
     }
 
     /**
      * 初始化日视图
      */
-    private void initAreaView(String mCurrentCityiD) {
-        updateAreas(mCurrentCityiD);
+    private void initAreaView(String mCurrentCityName) {
+        updateAreas(mCurrentCityName);
     }
 
     /**
@@ -196,16 +185,14 @@ class ProvincesCityAreaWheel {
     private void initJsonData() {
         try {
             StringBuffer sb = new StringBuffer();
-//            InputStream is = mContext.getAssets().open("ytf_city.json");
-            InputStream is = mContext.getAssets().open("city_id.json");
+            InputStream is = mContext.getAssets().open("ytf_city.json");
             int len = -1;
             byte[] buf = new byte[1024];
             while ((len = is.read(buf)) != -1) {
                 sb.append(new String(buf, 0, len, "utf-8"));
             }
             is.close();
-//            mJsonObj = new JSONObject(sb.toString());
-            mJsonArray = new JSONArray(sb.toString());
+            mJsonObj = new JSONObject(sb.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -218,13 +205,13 @@ class ProvincesCityAreaWheel {
      */
     private void initDatas() {
         try {
-            mProvinceDatas = new ArrayList<>();
-            for (int i = 0; i < mJsonArray.length(); i++) {
-                JSONObject jsonP = mJsonArray.getJSONObject(i);// 每个省的json对象
-                String province = jsonP.getString("name");// 省名字
-                String province_ID = jsonP.getString("id");// 省名字
+            JSONArray jsonArray = mJsonObj.getJSONArray("citylist");
+            mProvinceDatas = new String[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonP = jsonArray.getJSONObject(i);// 每个省的json对象
+                String province = jsonP.getString("p");// 省名字
 
-                mProvinceDatas.add(new CityIDBean(province,province_ID));
+                mProvinceDatas[i] = province;
 
                 JSONArray jsonCs = null;
                 try {
@@ -232,62 +219,57 @@ class ProvincesCityAreaWheel {
                      * Throws JSONException if the mapping doesn't exist or is
                      * not a JSONArray.
                      */
-                    jsonCs = jsonP.getJSONArray("city");
+                    jsonCs = jsonP.getJSONArray("c");
                 } catch (Exception e1) {
                     continue;
                 }
-                ArrayList<CityIDBean> mCitiesDatas = new ArrayList<>();
-                CityIDBean cityIDBean;
+                String[] mCitiesDatas = new String[jsonCs.length()];
                 for (int j = 0; j < jsonCs.length(); j++) {
                     JSONObject jsonCity = jsonCs.getJSONObject(j);
-                    String city = jsonCity.getString("name");// 市名字
-                    String city_id = jsonCity.getString("id");// 市名字
-                    cityIDBean = new CityIDBean(city,city_id);
-                    mCitiesDatas.add(cityIDBean);
+                    String city = jsonCity.getString("n");// 市名字
+                    mCitiesDatas[j] = city;
                     JSONArray jsonAreas = null;
                     try {
                         /**
                          * Throws JSONException if the mapping doesn't exist or
                          * is not a JSONArray.
                          */
-                        jsonAreas = jsonCity.getJSONArray("city");
+                        jsonAreas = jsonCity.getJSONArray("a");
                     } catch (Exception e) {
                         continue;
                     }
 
-                    ArrayList<CityIDBean> mAreasDatas = new ArrayList<>();// 当前市的所有区
+                    String[] mAreasDatas = new String[jsonAreas.length()];// 当前市的所有区
                     for (int k = 0; k < jsonAreas.length(); k++) {
-                        String area = jsonAreas.getJSONObject(k).getString("name");// 区域的名称
-                        String area_id = jsonAreas.getJSONObject(k).getString("id");// 区域的名称
-                        cityIDBean = new CityIDBean(area,area_id);
-                        mAreasDatas.add(cityIDBean);
+                        String area = jsonAreas.getJSONObject(k).getString("s");// 区域的名称
+                        mAreasDatas[k] = area;
                     }
-                    mAreaDatasMap.put(city_id, mAreasDatas);
+                    mAreaDatasMap.put(city, mAreasDatas);
                 }
 
-                mCitisDatasMap.put(province_ID, mCitiesDatas);
+                mCitisDatasMap.put(province, mCitiesDatas);
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mJsonArray = null;
+        mJsonObj = null;
     }
 
     /**
      * 根据当前的市，更新区WheelView的信息
      */
-    private void updateAreas(String mCurrentCityID) {
+    private void updateAreas(String mCurrentCityName) {
         if (mArea.getVisibility() == View.VISIBLE) {
-            ArrayList<CityIDBean> areas = mAreaDatasMap.get(mCurrentCityID);
-            String[] areasName = new String[areas.size()];
-            for (int i = 0; i < areas.size(); i++) {
-                areasName[i] = areas.get(i).getName();
+            String[] areas = mAreaDatasMap.get(mCurrentCityName);
+
+            if (areas == null) {
+                areas = new String[]{""};
             }
-            mArea.setViewAdapter(new ArrayWheelAdapter<String>(mContext, areasName));
-            if (areas.size() > 0) {
+            mArea.setViewAdapter(new ArrayWheelAdapter<String>(mContext, areas));
+            if (areas.length > 0) {
                 mArea.setCurrentItem(0);
-                mCurrentArea = areas.get(0);
+                mCurrentAreaName = areas[0];
             }
         }
     }
@@ -295,19 +277,18 @@ class ProvincesCityAreaWheel {
     /**
      * 根据当前的省，更新市WheelView的信息
      */
-    private void updateCities(String mCurrentProviceID) {
+    private void updateCities(String mCurrentProviceName) {
         if (mCity.getVisibility() == View.VISIBLE) {
-            ArrayList<CityIDBean> cities = mCitisDatasMap.get(mCurrentProviceID);
-            String[] citiesName = new String[cities.size()];
-            for (int i = 0; i < cities.size(); i++) {
-                citiesName[i] = cities.get(i).getName();
+            String[] cities = mCitisDatasMap.get(mCurrentProviceName);
+            if (cities == null) {
+                cities = new String[]{""};
             }
-            mCity.setViewAdapter(new ArrayWheelAdapter<String>(mContext, citiesName));
-            if (cities.size() > 0) {
+            mCity.setViewAdapter(new ArrayWheelAdapter<String>(mContext, cities));
+            if (cities.length > 0) {
                 mCity.setCurrentItem(0);
-                mCurrentCity = cities.get(0);
+                mCurrentCityName = cities[0];
             }
-            updateAreas(mCurrentCity.getID());
+            updateAreas(mCurrentCityName);
         }
 
     }
@@ -316,17 +297,14 @@ class ProvincesCityAreaWheel {
         JSONObject selectResult = new JSONObject();
 
         try {
-            if (mProvince.getVisibility() == View.VISIBLE && mCurrentProvice.getName().length() != 0) {
-                selectResult.put("province", mCurrentProvice.getName());
-                selectResult.put("province_id", mCurrentProvice.getID());
+            if (mProvince.getVisibility() == View.VISIBLE && mCurrentProviceName.length() != 0) {
+                selectResult.put("province", mCurrentProviceName);
             }
-            if (mCity.getVisibility() == View.VISIBLE && mCurrentCity.getName().length() != 0) {
-                selectResult.put("city", mCurrentCity.getName());
-                selectResult.put("city_id", mCurrentCity.getID());
+            if (mCity.getVisibility() == View.VISIBLE && mCurrentCityName.length() != 0) {
+                selectResult.put("city", mCurrentCityName);
             }
-            if (mArea.getVisibility() == View.VISIBLE && mCurrentArea.getName().length() != 0) {
-                selectResult.put("area", mCurrentArea.getName());
-                selectResult.put("area_id", mCurrentArea.getID());
+            if (mArea.getVisibility() == View.VISIBLE && mCurrentAreaName.length() != 0) {
+                selectResult.put("area", mCurrentAreaName);
             }
         } catch (JSONException e) {
             e.printStackTrace();

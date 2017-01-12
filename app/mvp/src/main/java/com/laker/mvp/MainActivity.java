@@ -1,15 +1,20 @@
 package com.laker.mvp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.laker.dateandareasselecter.DateTimeScrollerDialog;
-import com.laker.dateandareasselecter.config.DefaultConfig;
-import com.laker.dateandareasselecter.data.Type;
+import com.laker.dateandareasselecter.ProvincesCityAreaScrollerDialog;
 import com.laker.dateandareasselecter.listener.OnDateTimeSetListener;
+import com.laker.dateandareasselecter.listener.OnProvinceCityAreaSetListener;
 import com.laker.dateandareasselecter.utils.Utils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -17,15 +22,36 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private static final long HUNDRED_YEARS = 100L * 365 * 1000 * 60 * 60 * 24L; // 100年
     private TextView mTvTime;
+    private Context context;
 
     private SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     private long mLastTime = System.currentTimeMillis(); // 上次设置的时间
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context  =  MainActivity.this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        String strFormat = "getDpi = %s ,getScreenHeight = %s ,getStatusHeight = %s,screenHeightPx = %s,getDensity = %s";
+        mTvTime.setText(String.format(strFormat,ScreenUtils.getDpi(context),ScreenUtils.getScreenHeight(context),ScreenUtils.getStatusHeight(context),ScreenUtils.screenHeightPx(context),ScreenUtils.getDensity(context)));
+
+        try {
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name","a");
+            jsonObject.put("id",1);
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("name","b");
+            jsonObject1.put("id",2);
+            jsonArray.put(jsonObject);
+            jsonArray.put(jsonObject1);
+            Log.e("1111111111","jsonArray = "+jsonArray.toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -49,31 +75,24 @@ public class MainActivity extends AppCompatActivity {
 //                .setPostion(DefaultConfig.POSTION_CENTER)
 //                .build();
 
-        String[] HOUR_12_STRINGS = {"上午","下午"};
-        DateTimeScrollerDialog dialog = new DateTimeScrollerDialog.Builder()
-                .setType(Type.ALL)
-                .setTitleStringId("请选择出生日期")
-                .setMinMilliseconds(System.currentTimeMillis() - HUNDRED_YEARS)
-                .setMaxMilliseconds(System.currentTimeMillis()+HUNDRED_YEARS)
-                .setYearUnit("年")
-                .setMonthUnit("月")
-                .setDayUnit("日")
-                .setHourMode(DefaultConfig.HOUR_12)
-                .set12HourStrings(HOUR_12_STRINGS)
-                .setCurMilliseconds(mLastTime)
-                .setCallback(mOnDateTimeSetListener)
-                .setMaxLines(3)
-                .setPostion(DefaultConfig.POSTION_BOTTOM)
-                .build();
-
-//        ProvincesCityAreaScrollerDialog dialog = new ProvincesCityAreaScrollerDialog.Builder()
-//                .setType(Type.PROVINCE_CITY_AREA)
-//                .setTitleStringId("请选择城市")
-////                .setProvince("四川")
-////                .setMaxMilliseconds(System.currentTimeMillis()+HUNDRED_YEARS)
-////                .setCurMilliseconds(mLastTime)
-//                .setCallback(mOnProvinceCityAreaSetListener)
+//        String[] HOUR_12_STRINGS = {"上午","下午"};
+//        DateTimeScrollerDialog dialog = new DateTimeScrollerDialog.Builder()
+//                .setType(Type.ALL)
+//                .setTitleStringId("请选择出生日期")
+//                .setMinMilliseconds(System.currentTimeMillis() - HUNDRED_YEARS)
+//                .setMaxMilliseconds(System.currentTimeMillis()+HUNDRED_YEARS)
+//                .setYearUnit("年")
+//                .setMonthUnit("月")
+//                .setDayUnit("日")
+//                .setHourMode(DefaultConfig.HOUR_12)
+//                .set12HourStrings(HOUR_12_STRINGS)
+//                .setCurMilliseconds(mLastTime)
+//                .setCallback(mOnDateTimeSetListener)
+//                .setMaxLines(3)
+//                .setPostion(DefaultConfig.POSTION_BOTTOM)
 //                .build();
+
+
 
 //        ProvincesCityAreaScrollerDialog dialog = new ProvincesCityAreaScrollerDialog.Builder()
 //                .setType(Type.SINGLE_PROVINCE)
@@ -96,12 +115,22 @@ public class MainActivity extends AppCompatActivity {
 //                .setPostion(DefaultConfig.POSTION_CENTER)
 //                .build();
 //
-        if (dialog != null) {
-            if (!dialog.isAdded() && dialog.getShowsDialog()) {
-                dialog.show(getSupportFragmentManager(), "tag");
-                dialog.setShowsDialog(false);
-            }
-        }
+
+
+//        ProvincesCityAreaScrollerDialog dialog = new ProvincesCityAreaScrollerDialog.Builder()
+//                .setType(Type.PROVINCE_CITY)
+//                .setTitleStringId("请选择城市")
+////                .setProvince("四川")
+////                .setMaxMilliseconds(System.currentTimeMillis()+HUNDRED_YEARS)
+////                .setCurMilliseconds(mLastTime)
+//                .setCallback(mOnProvinceCityAreaSetListener)
+//                .build();
+//        if (dialog != null) {
+//            if (!dialog.isAdded() && dialog.getShowsDialog()) {
+//                dialog.show(getSupportFragmentManager(), "tag");
+//                dialog.setShowsDialog(false);
+//            }
+//        }
     }
 
     // 数据的回调
@@ -126,5 +155,12 @@ public class MainActivity extends AppCompatActivity {
         mTvTime = (TextView) findViewById(R.id.tv_time);
     }
 
+    // 数据的回调
+    private OnProvinceCityAreaSetListener mOnProvinceCityAreaSetListener = new OnProvinceCityAreaSetListener() {
 
+        @Override
+        public void onSelectSet(ProvincesCityAreaScrollerDialog timePickerView, String s) {
+            mTvTime.setText(s);
+        }
+    };
 }
