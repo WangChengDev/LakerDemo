@@ -1,1 +1,1 @@
-include ':app', ':extraModules:fragmentation', ':extraModules:fragmentation_swipeback', ':extraModules:ui', ':extraModules:base'
+include ':app', ':extraModules:fragmentation', ':extraModules:fragmentation_swipeback', ':extraModules:ui', ':extraModules:base', ':demo'
