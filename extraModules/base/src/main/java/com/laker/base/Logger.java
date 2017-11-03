@@ -79,10 +79,11 @@ public class Logger {
     private static String getInfo(String msg) {
         Throwable stack = new Throwable().fillInStackTrace();//获得栈
         StackTraceElement[] trace = stack.getStackTrace();
-        return "╔═════════════════════════════════════\n" +
+        return  "╔═════════════════════════════════════\n" +
                 "║***ThreadName:" + Thread.currentThread().getName() +"\n" +
                 "║***MethodName:" + trace[2].getMethodName() + "\n" +
-                "║***LineAt:" + trace[2].getLineNumber() + "\n║***Message:" + msg +"\n" +
+                "║***LineAt:" + trace[2].getLineNumber() + "\n" +
+                "║***Message:" + msg +"\n" +
                 "╚═════════════════════════════════════";//获得想要的信息
     }
 
