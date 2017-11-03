@@ -1,63 +1,126 @@
 package com.laker.demo;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.laker.base.FileProvider7;
 import com.laker.base.Logger;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+import java.io.File;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends Activity {
-
+    private static final String TAG = "RxPermissionsSample";
+    private RxPermissions rxPermissions;
+    private ImageView mIvPhoto;
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-//        Observable<Integer> integerObservable = Observable.create(new ObservableOnSubscribe<Integer>() {
-//            @Override
-//            public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-//                App.getsLogger().e("currentThread","Observable thread is :  ->"+Thread.currentThread().getName());
-//                App.getsLogger().e("Observable","subscribe ObservableEmitter ->"+123);
-//                e.onNext(123);
-//                App.getsLogger().e("Observable","subscribe ObservableEmitter ->"+456);
-//                e.onNext(456);
-//                App.getsLogger().e("Observable","subscribe ObservableEmitter ->"+789);
-//                e.onNext(789);
-//            }
-//        });
-//
-//        Consumer<Integer> integerConsumer = new Consumer<Integer>() {
-//            @Override
-//            public void accept(Integer integer) throws Exception {
-//                App.getsLogger().e("currentThread","Observer thread is :  ->"+Thread.currentThread().getName());
-//                App.getsLogger().e("Consumer","accept integer = "+integer);
-//
-//
-//            }
-//        };
-//
-////        integerObservable.subscribe(integerConsumer);
-//        integerObservable.subscribeOn(Schedulers.newThread())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(integerConsumer);
+        rxPermissions = new RxPermissions(MainActivity.this);
+        rxPermissions.setLogging(true);
 
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Logger.e("1111111111111111");
-                Logger.e("333","222222222222222");
-                Logger.e("3333333333" );
+
+
+        rxPermissions.request(
+//                Manifest.permission.RECORD_AUDIO,
+//                Manifest.permission.RECEIVE_MMS,
+//                Manifest.permission.READ_CALL_LOG,
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA
+        )
+                .subscribe(granted -> {
+                            Logger.i(TAG, " TRIGGER Received result " + granted);
+                            if (granted) {
+                                Toast.makeText(MainActivity.this,
+                                        "Permission granted",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(MainActivity.this,
+                                        "Permission denied",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        t -> Logger.e(TAG, "onError"+t),
+                        () -> Logger.i(TAG, "OnComplete"));
+
+
+        setContentView(R.layout.activity_main);
+        mIvPhoto = (ImageView) findViewById(R.id.mIvPhoto);
+        findViewById(R.id.btn_check).setOnClickListener(v -> {
+            if (checkSelfPermission(Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(MainActivity.this,
+                        "camera permission not granted",
+                        Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(MainActivity.this,
+                        "camera permission is granted",
+                        Toast.LENGTH_SHORT).show();
             }
         });
+        findViewById(R.id.btn).setOnClickListener(v -> rxPermissions.request(
+                Manifest.permission.CAMERA)
+                .subscribe(granted -> {
+                            Logger.i(TAG, " TRIGGER Received result " + granted);
+                            if (granted) {
+                                takePhotoNoCompress(mIvPhoto);
+                            } else {
+                                Toast.makeText(MainActivity.this,
+                                        "Permission denied",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        t -> Logger.e(TAG, "onError"+t),
+                        () -> Logger.i(TAG, "OnComplete")));
+
 
 
     }
+
+
+    private static final int REQUEST_CODE_TAKE_PHOTO = 0x110;
+    private String mCurrentPhotoPath;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void takePhotoNoCompress(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            String filename = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.CHINA)
+                    .format(new Date()) + ".png";
+            File file = new File(Environment.getExternalStorageDirectory(), filename);
+            mCurrentPhotoPath = file.getAbsolutePath();
+            // 仅需改变这一行
+            Uri fileUri = FileProvider7.getUriForFile(this, file);
+
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+            startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_TAKE_PHOTO) {
+            mIvPhoto.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
+        }
+        // else tip?
+
+    }
+
 }

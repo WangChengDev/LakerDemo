@@ -40,7 +40,8 @@ ext {
             "bugly_nativecrashreport"      : "com.tencent.bugly:nativecrashreport:latest.release",
             "umeng_analytics"              : "com.umeng.analytics:analytics:latest.integration",
             "timber"                       : "com.jakewharton.timber:timber:4.5.1",
-            "recyclerview"                 : "com.android.support:recyclerview-v7:23.2.0"
+            "recyclerview"                 : "com.android.support:recyclerview-v7:23.2.0",
+            "RxPermissions"                : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar",
     ]
 
 }

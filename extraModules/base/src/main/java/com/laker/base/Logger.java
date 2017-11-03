@@ -20,15 +20,16 @@ import timber.log.Timber;
 public class Logger {
     private static String TAG = "Laker";
     private static Context context;
+
     public static void init(boolean isDebug, Context _context) {
         context = _context;
-        init(isDebug, TAG,context);
+        init(isDebug, TAG, context);
     }
 
     public static void init(boolean isDebug, String tag, Context _context) {
         if (isDebug) {
             Timber.plant(new Timber.DebugTree());
-        }else {
+        } else {
             Timber.plant(new FileLoggingTree());
         }
         context = _context;
@@ -40,7 +41,7 @@ public class Logger {
     }
 
     public static void v(String tag, String msg) {
-        Timber.tag(tag + getTag()).v(getInfo() + msg);
+        Timber.tag(tag + getTag()).v(getInfo(msg));
     }
 
     public static void d(String msg) {
@@ -48,7 +49,7 @@ public class Logger {
     }
 
     public static void d(String tag, String msg) {
-        Timber.tag(tag + getTag()).d(getInfo() + msg);
+        Timber.tag(tag + getTag()).d(getInfo(msg));
     }
 
     public static void i(String msg) {
@@ -56,7 +57,7 @@ public class Logger {
     }
 
     public static void i(String tag, String msg) {
-        Timber.tag(tag + getTag()).i(getInfo() + msg);
+        Timber.tag(tag + getTag()).i(getInfo(msg));
     }
 
     public static void w(String msg) {
@@ -64,21 +65,25 @@ public class Logger {
     }
 
     public static void w(String tag, String msg) {
-        Timber.tag(tag + getTag()).w(getInfo() + msg);
+        Timber.tag(tag + getTag()).w(getInfo(msg));
     }
 
     public static void e(String msg) {
-        Timber.tag(TAG + getTag()).e(getInfo() + msg);
+        Timber.tag(TAG + getTag()).e(getInfo(msg));
     }
 
     public static void e(String tag, String msg) {
-        Timber.tag(tag + getTag()).e(getInfo() + msg);
+        Timber.tag(tag + getTag()).e(getInfo(msg));
     }
 
-    private static String getInfo() {
+    private static String getInfo(String msg) {
         Throwable stack = new Throwable().fillInStackTrace();//获得栈
         StackTraceElement[] trace = stack.getStackTrace();
-        return "|***ThreadName:" + Thread.currentThread().getName() + "\n|***MethodName:" + trace[2].getMethodName() + "\n|***LineAt:" + trace[2].getLineNumber()+"\n|***Message:";//获得想要的信息
+        return "╔═════════════════════════════════════\n" +
+                "║***ThreadName:" + Thread.currentThread().getName() +"\n" +
+                "║***MethodName:" + trace[2].getMethodName() + "\n" +
+                "║***LineAt:" + trace[2].getLineNumber() + "\n║***Message:" + msg +"\n" +
+                "╚═════════════════════════════════════";//获得想要的信息
     }
 
     private static String getTag() {
@@ -90,6 +95,7 @@ public class Logger {
 
     private static class FileLoggingTree extends Timber.Tree {
         String CacheDiaPath = context.getCacheDir().toString();
+
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
             if (TextUtils.isEmpty(CacheDiaPath)) {
@@ -106,7 +112,7 @@ public class Logger {
                 bufferedWriter.flush();
 
             } catch (IOException e) {
-                Logger.v( "存储文件失败");
+                Logger.v("存储文件失败");
                 e.printStackTrace();
             } finally {
                 if (bufferedWriter != null) {

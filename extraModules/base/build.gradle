@@ -15,4 +15,5 @@ dependencies {
     //provided 'com.android.support:appcompat-v7:24.2.1'
     provided rootProject.ext.dependencies["appcompat-v7"]
     compile rootProject.ext.dependencies["timber"]
+    compile rootProject.ext.dependencies["rxjava"]
 }
